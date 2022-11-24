@@ -1,12 +1,10 @@
 package actividad08;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HolaUsuario extends JFrame {
     private JTextField rpl_nuevoTrabajador;
