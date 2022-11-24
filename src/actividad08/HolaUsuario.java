@@ -20,6 +20,7 @@ public class HolaUsuario extends JFrame {
 
 
     public HolaUsuario(String rpl_nombreUsuario){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para que cuando se cierre la ventana acabe la aplicación with exit code
         setSize(800,500);
         setVisible(true);
         getContentPane().setLayout(null);
@@ -86,7 +87,7 @@ public class HolaUsuario extends JFrame {
         getContentPane().add(rpl_nuevoEmpleado);
 
         JButton rpl_mostrarEmpleados = new JButton("MOSTRAR EMPLEADOS");
-        rpl_mostrarEmpleados.addActionListener(new HolaUsuario.botonMostrarEmpleados());
+        rpl_mostrarEmpleados.addActionListener(new botonMostrarEmpleados());
         rpl_mostrarEmpleados.setBounds(400, 300, 250, 25);
         getContentPane().add(rpl_mostrarEmpleados);
     }
@@ -104,7 +105,7 @@ public class HolaUsuario extends JFrame {
                 rpl_dialogError.add(rpl_mensajeError);
                 rpl_dialogError.setSize(400, 200);
                 rpl_dialogError.setVisible(true);
-                System.out.println("SE QUEDA AQUÍ EL FLUJO JODER!");
+                //System.out.println("SE QUEDA AQUÍ EL FLUJO JODER!");
             }else{//si no
                 ObjectOutputStream rpl_oos;//creo variable de la clase para serializar objetos
                 ObjectInputStream rpl_ois;//creo la variable de la clase para leer objetos YA serializados y recuperarlos
@@ -118,11 +119,9 @@ public class HolaUsuario extends JFrame {
                             rpl_empleadosSerializados = (ArrayList<Empleado>) rpl_ois.readObject();//si hay guardo los objetos en el array
                             rpl_ois.close();//cerrar flujo de entrada
                          } catch (Exception errorLeer) {
-                            System.out.println("No se ha podido obtener el listado de empleados");
-                        }
+                         }
                     }
                     ArrayList<String> aficiones = new ArrayList<String>();//creo un array para las aficiones
-                    //HashMap<String, String> aficiones = new HashMap<String, String>();
                     if (rpl_check_cantar.isSelected()) {//si esta seleccionado el check "cantar"
                         aficiones.add(rpl_check_cantar.getText());//tomo el texto y lo añado al array aficiones
                     }
@@ -141,7 +140,6 @@ public class HolaUsuario extends JFrame {
 
                     Empleado rpl_nuevoEmpleado = new Empleado(rpl_nuevoTrabajador.getText(),//creo objeto Empleado con los datos obtenidos
                             rpl_seleccion_edad.getSelectedItem().toString(), rpl_sexo, aficiones);
-            //System.out.println(rpl_nuevoEmpleado);//para probar por pantalla
                     rpl_empleadosSerializados.add(rpl_nuevoEmpleado);//se añade al array un nuevo empleado
 
                     rpl_oos = new ObjectOutputStream(new FileOutputStream(rpl_archivoSer));//se crea objeto de la clase oos sobre el fichero
@@ -165,30 +163,7 @@ public class HolaUsuario extends JFrame {
         }
     }
 
-//    public class botonMostrarEmpleados implements ActionListener{
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            String rpl_separador = File.separator;
-//            String rpl_rutaProyecto = System.getProperty("user.dir");
-//            File rpl_archivoSer = new File(rpl_rutaProyecto + rpl_separador + "datos_empleados");//apunto al fichero datos_empleados
-//            ArrayList<Empleado> rpl_empleadosLeidos;
-//            ObjectInputStream rpl_ois;
-//            try {//prueba
-//                rpl_ois = new ObjectInputStream(new FileInputStream(rpl_archivoSer)); //leer archivos
-//                rpl_empleadosLeidos = (ArrayList<actividad08.Empleado>) rpl_ois.readObject();
-//                //rpl_empleadosLeidos = (ArrayList<Empleado>) rpl_ois.readObject();
-//                rpl_ois.close();
-//                ArrayList<String> rpl_stringEmpleados;
-//                for (Empleado rpl_empleadoLeido : rpl_empleadosLeidos){
-//                    rpl_empleadosLeidos = rpl_empleadosLeidos + "<br>" + rpl_empleadoLeido;
-//                }
-//            } catch (IOException | ClassNotFoundException ioException) {//o captura la excepcion
-//                ioException.printStackTrace();
-//            }
-//        }
-//    }
-
-    private class botonMostrarEmpleados implements ActionListener {
+    private static class botonMostrarEmpleados implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String rpl_separador = File.separator;
@@ -197,12 +172,12 @@ public class HolaUsuario extends JFrame {
             ArrayList<Empleado> rpl_empleadosLeidos;
             ObjectInputStream ois;
             try {
-                ois = new ObjectInputStream(new FileInputStream(rpl_archivo));
-                rpl_empleadosLeidos = (ArrayList<Empleado>) ois.readObject();
-                ois.close();
-                String rpl_empleados ="";
-                for (Empleado rpl_i : rpl_empleadosLeidos) {
-                    rpl_empleados = rpl_empleados + rpl_i;
+                ois = new ObjectInputStream(new FileInputStream(rpl_archivo));//recupero objetos serializados
+                rpl_empleadosLeidos = (ArrayList<Empleado>) ois.readObject();//se leen los objetos y se guardan en rpl_empleadosLeidos
+                ois.close();//se cierra el flujo de entrada
+                String rpl_empleados = new String();//se crea una variable para usarla en el foreach, y se inicializa porque si no no deja usarla
+                for (Empleado rpl_iterador : rpl_empleadosLeidos) {//foreach para recorrer el array empleados
+                    rpl_empleados = rpl_empleados + rpl_iterador;
                 }
                 JDialog rpl_dialogEmpleados = new JDialog();//hacemos que aprezca este mensaje
                 JLabel rpl_mensajeEmpleados= new JLabel("<html> Empleados<br>" + rpl_empleados + "</html>");
@@ -210,6 +185,11 @@ public class HolaUsuario extends JFrame {
                 rpl_dialogEmpleados.setSize(600, 400);
                 rpl_dialogEmpleados.setVisible(true);
             } catch (Exception e1) {
+                JDialog rpl_dialogNoEmpleados = new JDialog();
+                JLabel rpl_mensajeError = new JLabel("Aún NO hay empleados que mostrar");
+                rpl_dialogNoEmpleados.add(rpl_mensajeError);
+                rpl_dialogNoEmpleados.setSize(400, 200);
+                rpl_dialogNoEmpleados.setVisible(true);
                 e1.printStackTrace();
             }
         }
