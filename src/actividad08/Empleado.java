@@ -11,15 +11,11 @@ public class Empleado implements Serializable {
 
     /** CONSTRUCTOR **/
     public Empleado(String rpl_nombre, String rpl_edad, String rpl_sexo, ArrayList<String> rpl_aficiones) {
-//        super();
-//        this.rpl_nombre = rpl_nombre;
-//        this.rpl_edad = rpl_edad;
-//        this.rpl_sexo = rpl_sexo;
-//        this.rpl_aficiones = rpl_aficiones;
-        setRpl_nombre(rpl_nombre);
-        setRpl_edad(rpl_edad);
-        setRpl_sexo(rpl_sexo);
-        setRpl_aficiones(rpl_aficiones);
+        super();
+        this.rpl_nombre = rpl_nombre;
+        this.rpl_edad = rpl_edad;
+        this.rpl_sexo = rpl_sexo;
+        this.rpl_aficiones = rpl_aficiones;
     }
 
     /** GETTERS **/

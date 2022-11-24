@@ -79,13 +79,9 @@ public class Login extends JFrame {//clase Login que hereda de la clase JFrame
                 try {//prueba
                     if (logeo(rpl_nombreUsurio, rpl_contrasena)) {//si la funcion logeo con sus parámetros devuelve -> true
                         dispose();//cierra la ventana
-                        System.out.println("LOGIN CORRECTO");// esto es para probar si entra aquí
-                        new actividad08.HolaUsuario(rpl_nombreUsurio);//llamo a la clase y paso por parámetro el nombre
+                        new actividad08.HolaUsuario(rpl_nombreUsurio);//llamo a la clase y paso por parámetro el nombreUsuario y aparece en la siguiente
                     } else {//si no
-                        System.out.println("LOGIN INNNNNNNNNNNCORRECTO MAAAAL");//esto es para probar
                         rpl_credencialesIncorrectas.setVisible(true);//vuelve visible esta etiqueta que estaba oculta
-                        System.out.println("Nombre usuario = " + rpl_nombreUsurio);//para probar
-                        System.out.println("Contraseña = " + rpl_contrasena);//para probar
                     }
                 } catch (IOException fileNotFoundException) {//o captura el error
                     fileNotFoundException.printStackTrace();

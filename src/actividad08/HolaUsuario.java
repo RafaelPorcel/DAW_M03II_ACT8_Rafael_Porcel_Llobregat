@@ -5,8 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class HolaUsuario extends JFrame {
+public class HolaUsuario extends JFrame {//clase HolaUsuario con sus atributos y hereda de Jframe
     private JTextField rpl_nuevoTrabajador;
     private JCheckBox rpl_check_cantar;
     private JCheckBox rpl_check_bailar;
@@ -17,10 +18,11 @@ public class HolaUsuario extends JFrame {
     private JRadioButton rpl_femenino;
 
 
-    public HolaUsuario(String rpl_nombreUsuario){
+    public HolaUsuario(String rpl_nombreUsuario){//constructor de la ventana HolaUsuario, le pasamos por parámetro rpl_nombreUsuario
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para que cuando se cierre la ventana acabe la aplicación with exit code
-        setSize(800,500);
-        setVisible(true);
+        setSize(800,500);//tamaño
+        setVisible(true);//que sea visible
+        setLocationRelativeTo(null);//que aparezca en el centro de la pantalla
         getContentPane().setLayout(null);
 
         JLabel rpl_holaUsuario = new JLabel("Hola usuario: " + rpl_nombreUsuario);
@@ -31,7 +33,7 @@ public class HolaUsuario extends JFrame {
         rpl_labelNuevoTrabajador.setBounds(150, 50, 200, 25);
         getContentPane().add(rpl_labelNuevoTrabajador);
 
-        rpl_nuevoTrabajador = new JTextField();
+        rpl_nuevoTrabajador = new JTextField();//campo de texto
         rpl_nuevoTrabajador.setBounds(300, 50, 200, 25);
         getContentPane().add(rpl_nuevoTrabajador);
 
@@ -56,6 +58,7 @@ public class HolaUsuario extends JFrame {
         getContentPane().add(rpl_edad);
 
         rpl_seleccion_edad = new JComboBox();
+        rpl_seleccion_edad.addItem("");
         rpl_seleccion_edad.addItem("10-15");
         rpl_seleccion_edad.addItem("15-20");
         rpl_seleccion_edad.addItem("20-25");
@@ -67,26 +70,26 @@ public class HolaUsuario extends JFrame {
         rpl_sexo.setBounds(150, 200, 100, 25);
         getContentPane().add(rpl_sexo);
 
-        rpl_masculino = new JRadioButton("masculino");
+        rpl_masculino = new JRadioButton("masculino");//nuevo radiobutton
         rpl_masculino.setBounds(300, 200, 150,25 );
         getContentPane().add(rpl_masculino);
 
-        rpl_femenino = new JRadioButton("femenino");
+        rpl_femenino = new JRadioButton("femenino");//nuevo radiobutton
         rpl_femenino.setBounds(450, 200, 150,25 );
         getContentPane().add(rpl_femenino);
 
-        rpl_sexos = new ButtonGroup();
-        rpl_sexos.add(rpl_masculino);
-        rpl_sexos.add(rpl_femenino);
+        rpl_sexos = new ButtonGroup();//grupo de radiobutton
+        rpl_sexos.add(rpl_masculino);//agregamos al grupo
+        rpl_sexos.add(rpl_femenino);//agregamos al grupo
 
-        JButton rpl_nuevoEmpleado = new JButton("NUEVO EMPLEADO");
+        JButton rpl_nuevoEmpleado = new JButton("NUEVO EMPLEADO");//boton nuevo empleado
         rpl_nuevoEmpleado.addActionListener(new botonNuevoEmpleado());
         rpl_nuevoEmpleado.setBounds(200, 300, 150, 25);
         getContentPane().add(rpl_nuevoEmpleado);
 
-        JButton rpl_mostrarEmpleados = new JButton("MOSTRAR EMPLEADOS");
+        JButton rpl_mostrarEmpleados = new JButton("MOSTRAR EMPLEADOS");//boton mostrar empleados
         rpl_mostrarEmpleados.addActionListener(new botonMostrarEmpleados());
-        rpl_mostrarEmpleados.setBounds(400, 300, 250, 25);
+        rpl_mostrarEmpleados.setBounds(400, 300, 200, 25);
         getContentPane().add(rpl_mostrarEmpleados);
     }
 
@@ -96,14 +99,13 @@ public class HolaUsuario extends JFrame {
             ArrayList<Empleado> rpl_empleadosSerializados = new ArrayList<>();//arraylist para empleados (objetos) serializados
             if (rpl_nuevoTrabajador.getText().isEmpty() //si pasa alguna cosa de estas:
                     || (!rpl_check_cantar.isSelected() && !rpl_check_bailar.isSelected() && !rpl_check_deporte.isSelected())//conjunto de cosas que tienen que pasar todas
-                    || rpl_seleccion_edad.getSelectedItem().toString().length() ==0
+                    || Objects.requireNonNull(rpl_seleccion_edad.getSelectedItem()).toString().length() ==0
                     || rpl_sexos.getSelection() == null) {//que se muestre esta ventana con este mensaje
                 JDialog rpl_dialogError = new JDialog();
                 JLabel rpl_mensajeError = new JLabel("Rellena TODOS los campos");
                 rpl_dialogError.add(rpl_mensajeError);
                 rpl_dialogError.setSize(400, 200);
                 rpl_dialogError.setVisible(true);
-                //System.out.println("SE QUEDA AQUÍ EL FLUJO JODER!");
             }else{//si no
                 ObjectOutputStream rpl_oos;//creo variable de la clase para serializar objetos
                 ObjectInputStream rpl_ois;//creo la variable de la clase para leer objetos YA serializados y recuperarlos
@@ -119,6 +121,7 @@ public class HolaUsuario extends JFrame {
                          } catch (Exception errorLeer) {
                          }
                     }
+                    /** recoger valores para los atributos para crear el objeto de clase empleado **/
                     ArrayList<String> aficiones = new ArrayList<String>();//creo un array para las aficiones
                     if (rpl_check_cantar.isSelected()) {//si esta seleccionado el check "cantar"
                         aficiones.add(rpl_check_cantar.getText());//tomo el texto y lo añado al array aficiones
@@ -156,7 +159,6 @@ public class HolaUsuario extends JFrame {
                     rpl_dialogError.setVisible(true);
                     j.printStackTrace();
                 }
-
             }
         }
     }
@@ -167,17 +169,16 @@ public class HolaUsuario extends JFrame {
             String rpl_separador = File.separator;
             String rpl_rutaProyecto = System.getProperty("user.dir");
             File rpl_archivo = new File(rpl_rutaProyecto + rpl_separador + "datos_empleados");//fichero donde se guardan empleados
-            ArrayList<Empleado> rpl_empleadosLeidos;
+            ArrayList<Empleado> rpl_empleadosObtenidos;
             ObjectInputStream ois;
             try {//prueba a recuperar los objetos serializados
                 ois = new ObjectInputStream(new FileInputStream(rpl_archivo));//recupero objetos serializados
-                rpl_empleadosLeidos = (ArrayList<Empleado>) ois.readObject();//se leen los objetos y se guardan en rpl_empleadosLeidos
+                rpl_empleadosObtenidos = (ArrayList<Empleado>) ois.readObject();//se leen los objetos y se guardan en rpl_empleadosLeidos
                 ois.close();//se cierra el flujo de entrada
-                String rpl_empleados = new String();//se crea una variable para usarla en el foreach, y se inicializa porque si no no deja usarla
-                for (Empleado rpl_iterador : rpl_empleadosLeidos) {//foreach para recorrer el array empleados
-                    rpl_empleados = rpl_empleados + rpl_iterador;//obtengo un strig de objetos Empleado, extraidos de rpl_empleados
-                    //se extraen tipos de dato "Empleado", que es un objeto
-                    //rpl_empleadosLeidos es de donde se extraen los objetos Empleado
+                String rpl_empleados = new String();
+                for (Empleado rpl_i: rpl_empleadosObtenidos) {
+                    rpl_empleados = rpl_empleados + rpl_i;
+
                 }
                 JDialog rpl_dialogEmpleados = new JDialog();//hacemos que aprezca este mensaje
                 JLabel rpl_mensajeEmpleados= new JLabel("<html>EMPLEADOS<br>" + rpl_empleados + "</html>");//esto es para hacer salto de linea en el bloc de notas por cada objeto impreso como en el toString de Empleado
