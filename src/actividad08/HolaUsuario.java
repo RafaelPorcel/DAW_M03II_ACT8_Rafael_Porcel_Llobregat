@@ -168,23 +168,25 @@ public class HolaUsuario extends JFrame {
         public void actionPerformed(ActionEvent e) {
             String rpl_separador = File.separator;
             String rpl_rutaProyecto = System.getProperty("user.dir");
-            File rpl_archivo = new File(rpl_rutaProyecto + rpl_separador + "datos_empleados");
+            File rpl_archivo = new File(rpl_rutaProyecto + rpl_separador + "datos_empleados");//fichero donde se guardan empleados
             ArrayList<Empleado> rpl_empleadosLeidos;
             ObjectInputStream ois;
-            try {
+            try {//prueba a recuperar los objetos serializados
                 ois = new ObjectInputStream(new FileInputStream(rpl_archivo));//recupero objetos serializados
                 rpl_empleadosLeidos = (ArrayList<Empleado>) ois.readObject();//se leen los objetos y se guardan en rpl_empleadosLeidos
                 ois.close();//se cierra el flujo de entrada
                 String rpl_empleados = new String();//se crea una variable para usarla en el foreach, y se inicializa porque si no no deja usarla
                 for (Empleado rpl_iterador : rpl_empleadosLeidos) {//foreach para recorrer el array empleados
-                    rpl_empleados = rpl_empleados + rpl_iterador;
+                    rpl_empleados = rpl_empleados + rpl_iterador;//obtengo un strig de objetos Empleado, extraidos de rpl_empleados
+                    //se extraen tipos de dato "Empleado", que es un objeto
+                    //rpl_empleadosLeidos es de donde se extraen los objetos Empleado
                 }
                 JDialog rpl_dialogEmpleados = new JDialog();//hacemos que aprezca este mensaje
-                JLabel rpl_mensajeEmpleados= new JLabel("<html> Empleados<br>" + rpl_empleados + "</html>");
+                JLabel rpl_mensajeEmpleados= new JLabel("<html>EMPLEADOS<br>" + rpl_empleados + "</html>");//esto es para hacer salto de linea en el bloc de notas por cada objeto impreso como en el toString de Empleado
                 rpl_dialogEmpleados.add(rpl_mensajeEmpleados);
                 rpl_dialogEmpleados.setSize(600, 400);
                 rpl_dialogEmpleados.setVisible(true);
-            } catch (Exception e1) {
+            } catch (Exception e1) {//y si no, captura el error y muestra este mensaje
                 JDialog rpl_dialogNoEmpleados = new JDialog();
                 JLabel rpl_mensajeError = new JLabel("Aún NO hay empleados que mostrar");
                 rpl_dialogNoEmpleados.add(rpl_mensajeError);
